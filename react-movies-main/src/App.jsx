@@ -5,12 +5,13 @@ import MovieCard from './components/MovieCard.jsx'
 import { useDebounce } from 'react-use'
 import { getTrendingMovies, updateSearchCount } from './appwrite.js'
 
-const API_BASE_URL = 'https://api.themoviedb.org/3';
+const isProd = import.meta.env.MODE === 'production';
+const API_BASE_URL = isProd ? '/api/tmdb' : 'https://api.themoviedb.org/3';
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
-// Check if API key is available
-if (!API_KEY) {
+// Check if API key is available in development (prod uses server proxy)
+if (!isProd && !API_KEY) {
   console.error('VITE_TMDB_API_KEY is not set. Please create a .env file with your TMDB API key.');
 }
 
@@ -18,7 +19,7 @@ const API_OPTIONS = {
   method: 'GET',
   headers: {
     accept: 'application/json',
-    Authorization: `Bearer ${API_KEY}`
+    ...(isProd ? {} : { Authorization: `Bearer ${API_KEY}` })
   }
 }
 
@@ -46,8 +47,8 @@ const App = () => {
     setIsLoading(true);
     setErrorMessage('');
 
-    // Check if API key is available
-    if (!API_KEY) {
+    // In development, require client-side key; in prod the proxy injects it
+    if (!isProd && !API_KEY) {
       setErrorMessage('TMDB API key is not configured. Please check your environment variables.');
       setIsLoading(false);
       return;
@@ -86,8 +87,8 @@ const App = () => {
   }
 
   const loadTrendingMovies = async () => {
-    // Check if API key is available
-    if (!API_KEY) {
+    // In development, require client-side key; in prod the proxy injects it
+    if (!isProd && !API_KEY) {
       console.log('TMDB API key not available, skipping trending movies');
       return;
     }
