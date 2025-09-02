@@ -21,7 +21,13 @@
 
 **Responsiveness**: Fully responsive design that works seamlessly across devices.
 
-To do:
-better ui
-better landing page
+
+## <a name="to-do">🔋 To do</a>
+
+**better ui**
+**better landing page**
+**better surprise me function**
+
+
+
 
