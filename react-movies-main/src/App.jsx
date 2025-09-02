@@ -5,13 +5,12 @@ import MovieCard from './components/MovieCard.jsx'
 import { useDebounce } from 'react-use'
 import { getTrendingMovies, updateSearchCount } from './appwrite.js'
 
-const isProd = import.meta.env.MODE === 'production';
-const API_BASE_URL = isProd ? '/api/tmdb' : 'https://api.themoviedb.org/3';
+const API_BASE_URL = 'https://api.themoviedb.org/3';
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
-// Check if API key is available in development (prod uses server proxy)
-if (!isProd && !API_KEY) {
+// Check if API key is available
+if (!API_KEY) {
   console.error('VITE_TMDB_API_KEY is not set. Please create a .env file with your TMDB API key.');
 }
 
@@ -19,7 +18,7 @@ const API_OPTIONS = {
   method: 'GET',
   headers: {
     accept: 'application/json',
-    ...(isProd ? {} : { Authorization: `Bearer ${API_KEY}` })
+    Authorization: `Bearer ${API_KEY}`
   }
 }
 
@@ -47,8 +46,8 @@ const App = () => {
     setIsLoading(true);
     setErrorMessage('');
 
-    // In development, require client-side key; in prod the proxy injects it
-    if (!isProd && !API_KEY) {
+    // Check if API key is available
+    if (!API_KEY) {
       setErrorMessage('TMDB API key is not configured. Please check your environment variables.');
       setIsLoading(false);
       return;
@@ -87,8 +86,8 @@ const App = () => {
   }
 
   const loadTrendingMovies = async () => {
-    // In development, require client-side key; in prod the proxy injects it
-    if (!isProd && !API_KEY) {
+    // Check if API key is available
+    if (!API_KEY) {
       console.log('TMDB API key not available, skipping trending movies');
       return;
     }
@@ -221,37 +220,14 @@ const App = () => {
       <div className="pattern"/>
 
       <div className="wrapper">
-        <header className="hero">
-          <div className="hero__col hero__content">
-            <p className="badge">New • Weekly picks powered by TMDB</p>
-            <h1>
-              Find <span className="text-gradient">movies</span> you'll love
-            </h1>
-            <p className="subtitle">
-              Discover trending hits and hidden gems. Search thousands of titles and watch trailers instantly.
-            </p>
+        <header>
+          <img src="./hero.png" alt="Hero Banner" />
+          <h1>Find <span className="text-gradient">Movies</span> You'll Enjoy Without the Hassle</h1>
 
-            <div className="hero__actions">
-              <a href="#trending" className="btn btn--primary">Browse Trending</a>
-              <button type="button" className="btn btn--ghost" onClick={() => {
-                if (trendingMovies.length > 0) {
-                  const random = trendingMovies[Math.floor(Math.random() * trendingMovies.length)];
-                  handleMovieClick(random);
-                }
-              }}>Surprise Me</button>
-            </div>
-
-            <div className="hero__search">
-              <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-            </div>
-          </div>
-
-          <div className="hero__col hero__visual">
-            <img className="hero__image" src="./hero.png" alt="Enjoy movies" />
-          </div>
+          <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
 
-        <section id="trending" className="trending">
+        <section className="trending">
           <h2>Trending Movies This Week</h2>
 
           {isLoadingTrending ? (
