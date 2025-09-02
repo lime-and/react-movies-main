@@ -4,13 +4,24 @@ const PROJECT_ID = import.meta.env.VITE_APPWRITE_PROJECT_ID;
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const COLLECTION_ID = import.meta.env.VITE_APPWRITE_COLLECTION_ID;
 
+// Check if Appwrite configuration is available
+if (!PROJECT_ID || !DATABASE_ID || !COLLECTION_ID) {
+  console.warn('Appwrite configuration is incomplete. Some features may not work properly.');
+}
+
 const client = new Client()
   .setEndpoint('https://fra.cloud.appwrite.io/v1')
-  .setProject(PROJECT_ID)
+  .setProject(PROJECT_ID || 'dummy-project-id')
 
 const database = new Databases(client);
 
 export const updateSearchCount = async (searchTerm, movie) => {
+  // Skip if Appwrite is not configured
+  if (!PROJECT_ID || !DATABASE_ID || !COLLECTION_ID) {
+    console.log('Appwrite not configured, skipping search count update');
+    return;
+  }
+
   // 1. Use Appwrite SDK to check if the search term exists in the database
  try {
   const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
@@ -39,6 +50,12 @@ export const updateSearchCount = async (searchTerm, movie) => {
 }
 
 export const getTrendingMovies = async () => {
+  // Skip if Appwrite is not configured
+  if (!PROJECT_ID || !DATABASE_ID || !COLLECTION_ID) {
+    console.log('Appwrite not configured, returning empty trending movies');
+    return [];
+  }
+
  try {
   const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
     Query.limit(5),
@@ -48,5 +65,6 @@ export const getTrendingMovies = async () => {
   return result.documents;
  } catch (error) {
   console.error(error);
+  return [];
  }
 }
