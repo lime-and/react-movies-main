@@ -25,3 +25,12 @@ To do:
 better ui
 better landing page
 
+
+Landing page:
+<img width="2556" height="1388" alt="image" src="https://github.com/user-attachments/assets/5eb70559-73e7-4def-8046-f55782865ec6" />
+
+<img width="684" height="1075" alt="image" src="https://github.com/user-attachments/assets/5e0590eb-3dc6-49ea-9f70-e6b1fcee5aac" />
+
+search function
+<img width="2547" height="1384" alt="image" src="https://github.com/user-attachments/assets/2b49b646-3293-4517-aad4-9965184403c0" />
+
