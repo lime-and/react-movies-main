@@ -34,3 +34,5 @@ Landing page:
 search function
 <img width="2547" height="1384" alt="image" src="https://github.com/user-attachments/assets/2b49b646-3293-4517-aad4-9965184403c0" />
 
+deployed site:
+https://react-movies-main.vercel.app/
